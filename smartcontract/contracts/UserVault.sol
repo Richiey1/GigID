@@ -511,4 +511,91 @@ contract UserVault is ERC20, IERC4626, Ownable {
             }
         }
     }
+
+    /*//////////////////////////////////////////////////////////////
+                        COMPOUND INTEGRATION
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @notice Deploy assets to Compound protocol to earn interest
+     * @dev Only the vault owner can call this function
+     * @param amount The amount of assets to deploy to Compound
+     */
+    function deployToCompound(uint256 amount) external onlyOwner {
+        if (amount == 0) revert InvalidAmount();
+        
+        // Get Compound cToken address from factory
+        address compoundAddress = IVaultFactory(_factory).getCompoundAddress();
+        if (compoundAddress == address(0)) revert ProtocolAddressNotSet();
+        
+        // Check vault has sufficient balance
+        uint256 availableBalance = _asset.balanceOf(address(this));
+        if (amount > availableBalance) revert InsufficientBalance();
+        
+        // Approve cToken contract to spend assets
+        _asset.safeIncreaseAllowance(compoundAddress, amount);
+        
+        // Supply assets to Compound
+        ICToken cToken = ICToken(compoundAddress);
+        uint256 result = cToken.mint(amount);
+        
+        // Check if mint was successful (Compound returns 0 on success)
+        if (result != 0) revert CompoundOperationFailed();
+        
+        // Update tracking
+        compoundDeposited += amount;
+        
+        // Emit event
+        emit ProtocolDeployed("Compound", amount);
+    }
+
+    /**
+     * @notice Withdraw assets from Compound protocol
+     * @dev Only the vault owner can call this function
+     * @param amount The amount of assets to withdraw from Compound
+     */
+    function withdrawFromCompound(uint256 amount) external onlyOwner {
+        if (amount == 0) revert InvalidAmount();
+        
+        // Get Compound cToken address from factory
+        address compoundAddress = IVaultFactory(_factory).getCompoundAddress();
+        if (compoundAddress == address(0)) revert ProtocolAddressNotSet();
+        
+        // Check sufficient balance in Compound
+        if (amount > compoundDeposited) revert InsufficientBalance();
+        
+        // Redeem underlying assets from Compound
+        ICToken cToken = ICToken(compoundAddress);
+        uint256 result = cToken.redeemUnderlying(amount);
+        
+        // Check if redeem was successful (Compound returns 0 on success)
+        if (result != 0) revert CompoundOperationFailed();
+        
+        // Update tracking
+        compoundDeposited -= amount;
+        
+        // Emit event
+        emit ProtocolWithdrawn("Compound", amount);
+    }
+
+    /**
+     * @notice Get the current balance of assets deposited in Compound
+     * @dev This returns the actual balance from Compound, which may be higher due to accrued interest
+     * @return The amount of underlying assets in Compound
+     */
+    function getCompoundBalance() public returns (uint256) {
+        address compoundAddress = IVaultFactory(_factory).getCompoundAddress();
+        if (compoundAddress == address(0)) return 0;
+        
+        ICToken cToken = ICToken(compoundAddress);
+        return cToken.balanceOfUnderlying(address(this));
+    }
 }
+
+/**
+ * @dev Interface for VaultFactory to get protocol addresses
+ */
+interface IVaultFactory {
+    function getCompoundAddress() external view returns (address);
+}
+
