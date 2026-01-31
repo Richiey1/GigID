@@ -31,15 +31,30 @@ const VAULT_ABI = [
     inputs: [{ name: 'account', type: 'address' }],
     outputs: [{ name: '', type: 'uint256' }],
   },
+  {
+    name: 'transfer',
+    type: 'function',
+    stateMutability: 'nonpayable',
+    inputs: [{ name: 'to', type: 'address' }, { name: 'amount', type: 'uint256' }],
+    outputs: [{ name: '', type: 'bool' }],
+  },
 ] as const;
 
-export function useUserVault(vaultAddress: `0x${string}`) {
+export function useUserVault(vaultAddress: `0x${string}`, userAddress?: `0x${string}`) {
   const { writeContract, isPending } = useWriteContract();
 
   const { data: totalAssets } = useReadContract({
     address: vaultAddress,
     abi: VAULT_ABI,
     functionName: 'totalAssets',
+  });
+
+  const { data: userShares, refetch: refetchShares } = useReadContract({
+    address: vaultAddress,
+    abi: VAULT_ABI,
+    functionName: 'balanceOf',
+    args: userAddress ? [userAddress] : undefined,
+    query: { enabled: !!userAddress },
   });
 
   const deposit = (amount: string, receiver: `0x${string}`) => {
@@ -60,10 +75,22 @@ export function useUserVault(vaultAddress: `0x${string}`) {
     });
   };
 
+  const transferShares = (to: `0x${string}`, amount: string) => {
+    writeContract({
+      address: vaultAddress,
+      abi: VAULT_ABI,
+      functionName: 'transfer',
+      args: [to, parseUnits(amount, 6)],
+    });
+  };
+
   return {
     totalAssets: totalAssets ? formatUnits(totalAssets, 6) : '0',
+    userShares: userShares ? formatUnits(userShares, 6) : '0',
     deposit,
     withdraw,
+    transferShares,
     isPending,
+    refetchShares,
   };
 }
