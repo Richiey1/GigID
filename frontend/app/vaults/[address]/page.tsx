@@ -5,11 +5,17 @@ import { useParams } from 'next/navigation';
 import { Card } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
+import { ShareTransfer } from '../../../components/vaults/ShareTransfer';
+import { useUserVault } from '@/hooks/useUserVault';
+import { useAccount } from 'wagmi';
 
 export default function VaultManagementPage() {
   const params = useParams();
   const address = params.address as string;
-  const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw'>('deposit');
+  const { address: userAddress } = useAccount();
+  const { totalAssets, userShares } = useUserVault(address as `0x${string}`, userAddress);
+  
+  const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw' | 'transfer'>('deposit');
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -21,11 +27,11 @@ export default function VaultManagementPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Card>
           <p className="text-sm text-neutral-muted mb-1">Total Assets</p>
-          <p className="text-2xl font-bold">1,250.00 USDC</p>
+          <p className="text-2xl font-bold">{totalAssets} USDC</p>
         </Card>
         <Card>
           <p className="text-sm text-neutral-muted mb-1">Your Shares</p>
-          <p className="text-2xl font-bold">1,250.00 vUSDC</p>
+          <p className="text-2xl font-bold">{userShares} vUSDC</p>
         </Card>
         <Card>
           <p className="text-sm text-neutral-muted mb-1">Current APY</p>
@@ -36,10 +42,10 @@ export default function VaultManagementPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
           <Card>
-            <div className="flex gap-4 border-b border-gray-100 dark:border-gray-800 pb-4 mb-6">
+            <div className="flex gap-4 border-b border-gray-100 dark:border-gray-800 pb-4 mb-6 overflow-x-auto">
               <button
                 onClick={() => setActiveTab('deposit')}
-                className={`text-lg font-medium pb-1 ${
+                className={`text-lg font-medium pb-1 whitespace-nowrap ${
                   activeTab === 'deposit' 
                     ? 'text-primary border-b-2 border-primary' 
                     : 'text-neutral-muted hover:text-neutral-dark'
@@ -49,7 +55,7 @@ export default function VaultManagementPage() {
               </button>
               <button
                 onClick={() => setActiveTab('withdraw')}
-                className={`text-lg font-medium pb-1 ${
+                className={`text-lg font-medium pb-1 whitespace-nowrap ${
                   activeTab === 'withdraw' 
                     ? 'text-primary border-b-2 border-primary' 
                     : 'text-neutral-muted hover:text-neutral-dark'
@@ -57,9 +63,19 @@ export default function VaultManagementPage() {
               >
                 Withdraw
               </button>
+              <button
+                onClick={() => setActiveTab('transfer')}
+                className={`text-lg font-medium pb-1 whitespace-nowrap ${
+                  activeTab === 'transfer' 
+                    ? 'text-primary border-b-2 border-primary' 
+                    : 'text-neutral-muted hover:text-neutral-dark'
+                }`}
+              >
+                Transfer
+              </button>
             </div>
 
-            {activeTab === 'deposit' ? (
+            {activeTab === 'deposit' && (
               <div className="space-y-4">
                 <Input label="Amount to Deposit" placeholder="0.00" type="number" />
                 <div className="flex justify-between text-sm text-neutral-muted">
@@ -68,15 +84,21 @@ export default function VaultManagementPage() {
                 </div>
                 <Button className="w-full">Approve USDC</Button>
               </div>
-            ) : (
+            )}
+
+            {activeTab === 'withdraw' && (
               <div className="space-y-4">
                 <Input label="Amount to Withdraw" placeholder="0.00" type="number" />
                 <div className="flex justify-between text-sm text-neutral-muted">
-                  <span>Available: 1,250.00 vUSDC</span>
+                  <span>Available: {userShares} vUSDC</span>
                   <button className="text-primary hover:underline">Max</button>
                 </div>
                 <Button className="w-full" variant="outline">Withdraw Funds</Button>
               </div>
+            )}
+
+            {activeTab === 'transfer' && (
+              <ShareTransfer vaultAddress={address as `0x${string}`} />
             )}
           </Card>
         </div>
