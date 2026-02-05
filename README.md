@@ -1,93 +1,83 @@
-Gig Worker Income Verification
-Gig Worker Income Verification
+# GigID: Gig Worker Income Verification
 
 On-chain income credentials for gig workers to access credit, loans, and financial services.
 
-Millions of gig workers earn legitimate income but are denied loans, rentals, and financial services because their income cannot be verified through traditional systems. This platform creates verifiable, cryptographic proof of income using blockchain attestations.
+Millions of gig workers earn legitimate income but are denied loans, rentals, and financial services because their income cannot be verified through traditional systems. **GigID** creates verifiable, cryptographic proof of income using blockchain attestations on the Base network.
 
-🚀 Problem
+## 🚀 Problem
 
-Gig workers face systemic financial exclusion:
+Gig workers face systemic financial exclusion due to:
+- **No W-2 or traditional pay stubs**: Traditional institutions rely on outdated documentation.
+- **Unverifiable Income**: Banks and lenders cannot easily verify gig platform earnings.
+- **Fraud Risk**: Manual statements are easily falsified, leading to high rejection rates.
+- **Incomplete Scoring**: Credit scoring systems often ignore stable gig income streams.
 
-No W-2 or traditional pay stubs
+## 💡 Solution
 
-Banks and lenders cannot verify income
+**GigID** provides on-chain income attestations and verifiable credentials, allowing gig workers to prove earnings to lenders without revealing sensitive data.
 
-Manual statements are easily falsified
+## ✨ Core Features
 
-Credit scoring systems ignore gig platforms
+### 🧾 On-Chain Income Attestations
+- Record verified income events on-chain.
+- Immutable and tamper-resistant ledger.
+- Timestamped payment records for historical consistency.
 
-💡 Solution
+### 🎟 Income Credential NFTs
+- Mint verifiable income proof tokens.
+- Portable across platforms and lenders.
+- User-controlled financial identity.
 
-Gig Worker Income Verification provides on-chain income attestations and verifiable credentials, allowing gig workers to prove earnings to lenders without revealing sensitive data.
+### 🔐 Privacy-Preserving Proofs
+- Zero-knowledge proofs for income ranges.
+- Prove income without revealing exact amounts.
+- Selective disclosure for lenders to maintain privacy.
 
-✨ Core Features
-🧾 On-Chain Income Attestations
+### 🏦 Lender Verification Portal
+- Dashboard for lenders to verify credentials.
+- API for fintech and DeFi integration.
+- Attestation registry lookup for instant verification.
 
-Record verified income events on-chain
+## 🧱 Architecture Overview
 
-Immutable and tamper-resistant
+- **Income Registry Contract**: Records verified earnings on-chain.
+- **Credential NFT Contract**: Issues income certificates as portable tokens.
+- **Attestation Service**: Verifies off-chain income sources before on-chain recording.
+- **Verification Dashboard**: Interface for lenders and financial institutions.
 
-Timestamped payment records
+## 🛠 Tech Stack
 
-🎟 Income Credential NFTs
+- **Smart Contracts**: Solidity
+- **Blockchain**: Base
+- **Development**: Hardhat
+- **Frontend**: Next.js + React
+- **Identity**: EAS (Ethereum Attestation Service) / Custom Attestations
+- **ZK Layer**: zkSNARKs (Optional future module)
 
-Mint verifiable income proof tokens
-
-Portable across platforms and lenders
-
-User-controlled financial identity
-
-🔐 Privacy-Preserving Proofs
-
-Zero-knowledge proofs for income ranges
-
-Prove income without revealing exact amounts
-
-Selective disclosure for lenders
-
-🏦 Lender Verification Portal
-
-Dashboard for lenders to verify credentials
-
-API for fintech and DeFi integration
-
-Attestation registry lookup
-
-🧱 Architecture Overview
-
-Income Registry Contract – Records verified earnings
-
-Credential NFT Contract – Issues income certificates
-
-Attestation Service – Verifies off-chain income sources
-
-Verification Dashboard – For lenders and institutions
-
-🛠 Tech Stack
-
-Smart Contracts: Solidity
-
-Blockchain: Base
-
-Development: Hardhat
-
-Frontend: Next.js + React
-
-Identity: EAS (Ethereum Attestation Service) / custom attestations
-
-ZK Layer: zkSNARKs (optional future module)
-
-🎯 Vision
+## 🎯 Vision
 
 To create a global, decentralized financial identity layer for gig workers, enabling fair access to loans, housing, and financial products.
 
-🧩 Future Extensions
+## 🧩 Future Extensions
 
-Credit scoring smart contracts
+- Credit scoring smart contracts.
+- DeFi lending protocol integrations.
+- Cross-platform gig API connectors.
+- Decentralized identity (DID) integration.
 
-DeFi lending protocol integrations
+## 📁 Project Structure
 
-Cross-platform gig API connectors
-
-Decentralized identity (DID) integration
+```
+SmartX/ (To be renamed to GigID)
+├── smartcontract/          # Solidity smart contracts (Base)
+│   ├── contracts/          # Income Registry & NFT contracts
+│   ├── test/               # Quality assurance & security tests
+│   ├── scripts/            # Deployment & initialization scripts
+│   └── README.md           # Smart contract documentation
+│
+└── frontend/               # Next.js frontend application
+    ├── app/                # App router pages & layouts
+    ├── components/         # Reusable React components
+    ├── config/             # Wagmi & wallet configuration
+    └── README.md           # Frontend documentation
+```
