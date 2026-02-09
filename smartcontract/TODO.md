@@ -5,7 +5,7 @@ This file tracks the development tasks for the GigID smart contracts.
 ## ❌ Pending Issues
 
 ### Issue #1: Income Registry Development
-**Status:** ❌ PENDING  
+**Status:** ✅ COMPLETED  
 **Labels:** `smart-contracts`, `core`, `registry`  
 **Priority:** HIGH
 
@@ -13,10 +13,10 @@ This file tracks the development tasks for the GigID smart contracts.
 Implement the core `IncomeRegistry` contract to record verified income events on-chain using Base.
 
 **Acceptance Criteria:**
-- [ ] Define income record structure (Amount, Source, Timestamp, Attestation ID).
-- [ ] Implement `recordIncome` function with access control.
-- [ ] Implement view functions for selective disclosure.
-- [ ] Integrate with Ethereum Attestation Service (EAS).
+- [x] Define income record structure (Amount, Source, Timestamp, Attestation ID).
+- [x] Implement `recordIncome` function with access control.
+- [x] Implement view functions for selective disclosure.
+- [x] Integrate with Ethereum Attestation Service (EAS) patterns.
 
 ---
 
