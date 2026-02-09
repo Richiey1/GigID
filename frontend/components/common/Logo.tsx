@@ -15,7 +15,7 @@ export const Logo = ({ className = "w-8 h-8", textClassName = "text-2xl" }: { cl
           className="text-primary"
         />
       </svg>
-      <span className={`font-bold tracking-tight ${textClassName}`}>SmartX</span>
+      <span className={`font-bold tracking-tight ${textClassName}`}>GigID</span>
     </div>
   );
 };
