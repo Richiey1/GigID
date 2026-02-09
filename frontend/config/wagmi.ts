@@ -18,6 +18,12 @@ createAppKit({
   adapters: [wagmiAdapter],
   networks: [base, baseSepolia],
   projectId,
+  metadata: {
+    name: 'GigID',
+    description: 'Gig Worker Income Verification',
+    url: 'https://gigid.io', // Placeholder
+    icons: ['https://avatars.githubusercontent.com/u/179229932'] // Placeholder
+  },
   features: {
     analytics: true
   },
