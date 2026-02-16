@@ -15,7 +15,7 @@ Set up the core onboarding flow and wallet connection for gig workers.
 **Acceptance Criteria:**
 - [ ] Reown AppKit integration for multiple wallet support.
 - [x] Wallet-based authentication (Navbar integration).
-- [ ] Initial profile setup (Name, Gig Platforms).
+- [x] Initial profile setup (Name, Gig Platforms).
 
 ---
 
